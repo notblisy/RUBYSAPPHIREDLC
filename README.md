@@ -23,9 +23,15 @@ Based on this PokeCardE fork: https://github.com/Artrios/pokecarde
 
 Credits:
 me - programmer
+
 Shao - Programming assistance
+
 Riley - programming assistance, pokeemerald files
+
 Goppier - setboxmondata informant and programming assistance
+
 UndeadXReality - programming assistance & .sav provider
+
 happylappy - general assistance
+
 Malicia - programming assistance
