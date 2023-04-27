@@ -13,6 +13,11 @@ Inject with the INJECT ME3 Option.
 
 To build from source follow this thread: https://www.pokecommunity.com/showthread.php?t=455241
 
+PRINTING: https://docs.google.com/document/d/10RraYTTzzivAPC-yVt82ENmBjryv4VX8Rw-eoNLW44k/edit
+
+This google doc contains the dimension I printed it at, make a copy of the doc for yourself and 
+line up the blisy face to the 3.5 inch marker. 
+
 TO DO:
 
 Comment Source code
