@@ -1,0 +1,940 @@
+LASTRESULT EQU $800D
+end: MACRO
+	db $02
+	ENDM
+return: MACRO
+	db $03
+	ENDM
+goto: MACRO
+	db $05
+	dd \1
+	ENDM
+goto_if: MACRO
+	db $06
+	db \1
+	dd \2
+	ENDM
+call_if: MACRO
+	db $07
+	db \1
+	dd \2
+	ENDM
+gotostd: MACRO
+	db $08
+	db \1
+	ENDM
+callstd: MACRO
+	db $09, \1
+	ENDM
+gotostd_if: MACRO
+	db $0A
+	db \1
+	db \2
+	ENDM
+callstd_if: MACRO
+	db $0B
+	db \3
+	db \2
+	ENDM
+returnram: MACRO
+	db $0C
+	ENDM
+killscript: MACRO
+	db $0D
+	ENDM
+setbyte: MACRO
+	db $0E, \1
+	ENDM
+loadword: MACRO
+	db $0F
+	db \1
+	dd \2
+	ENDM
+callasm: MACRO
+	db $23
+	dd \1
+	ENDM
+loadbyte: MACRO
+	db $10
+	db \1
+	db \2
+	ENDM
+writebytetoaddr: MACRO
+	db $11
+	db \1
+	dd \2
+	ENDM
+loadbytefromaddr: MACRO
+	db $12
+	db \1
+	dd \2
+	ENDM
+setptrbyte: MACRO
+	db $13
+	db \1
+	dd \2
+	ENDM
+copylocal: MACRO
+	db $14
+	db \1
+	db \2
+	ENDM
+copybyte: MACRO
+	db $15
+	dd \1
+	dd \2
+	ENDM
+setvar: MACRO
+	db $16
+	dw \1
+	dw \2
+	ENDM
+addvar: MACRO
+	db $17
+	dw \1
+	dw \2
+	ENDM
+subvar: MACRO
+	db $18
+	dw \1
+	dw \2
+	ENDM
+copyvar: MACRO
+	db $19
+	dw \1
+	dw \2
+	ENDM
+copyvarifnotzero: MACRO
+	db $1A
+	dw \1, \2
+	ENDM
+compare: MACRO
+	db $21
+	dw \1, \2
+	ENDM
+comparevar: MACRO
+	db $22
+	dw \1, \2
+	ENDM
+setflag: MACRO
+	db $29
+	dw \1
+	ENDM
+clearflag: MACRO
+	db $2A
+	dw \1
+	ENDM
+checkflag: MACRO
+	db $2B
+	dw \1
+	ENDM
+playfanfare: MACRO
+	db $31
+	dw \1
+	ENDM
+waitfanfare: MACRO
+	db $32
+	ENDM
+getpartysize: MACRO
+	db $43
+	ENDM
+fadeout: MACRO
+	db $37
+        dw \1
+	ENDM
+additem: MACRO
+	db $44
+	dw \1, \2
+	ENDM
+checkitemroom: MACRO
+	db $46
+	dw \1, \2
+	ENDM
+checkitem: MACRO
+	db $47
+	dw \1, \2
+	ENDM
+checkitemtype: MACRO
+	db $48
+	dw \1
+	ENDM
+checkpcitem: MACRO
+	db $4A
+	dw \1, \2
+	ENDM
+adddecoration: MACRO
+	db $4b
+	dw \1
+	ENDM
+faceplayer: MACRO
+	db $5A
+	ENDM
+waitmsg: MACRO
+	db $66
+	ENDM
+lock: MACRO
+	db $6A
+	ENDM
+release: MACRO
+	db $6C
+	ENDM
+waitkeypress: MACRO
+	db $6D
+	ENDM
+showmonpic: MACRO
+	db $75
+	dw \1
+	db \2
+	db \3
+	ENDM
+hidemonpic: MACRO
+	db $76
+	ENDM
+hidesprite: MACRO
+	db $53
+	dw \1
+	ENDM
+showcontestpainting: MACRO
+	db $77
+	db \1
+	ENDM
+braillemessage: MACRO
+	db $78
+	dd \1
+	ENDM
+brailleformat: MACRO
+	db \1
+	db \2
+	db \3
+	db \4
+	db \5
+	db \6
+	ENDM
+givemon: MACRO
+	db $79
+	dw \1
+	db \2
+	dw \3
+	dd \4
+	dd \5
+	db \6
+	ENDM
+giveegg: MACRO
+	db $7A
+	dw \1
+	ENDM
+setmonmove: MACRO
+	db $7b
+	db \1
+	db \2
+	dw \3
+	ENDM
+checkpartymove: MACRO
+	db $7c
+	dw \1
+	ENDM
+bufferspeciesname: MACRO
+	db $7d
+	db \1
+	dw \2
+	ENDM
+bufferleadmonspeciesname: MACRO
+	db $7E
+	db \1
+	ENDM
+bufferpartymonnick: MACRO
+	db $7f
+	db \1
+	dw \2
+	ENDM
+bufferitemname: MACRO
+	db $80
+	db \1
+	dw \2
+	ENDM
+bufferdecorationname: MACRO
+	db $81
+	db \1
+	dw \2
+	ENDM
+buffermovename: MACRO
+	db $82
+	db \1
+	dw \2
+	ENDM
+random: MACRO
+	db $8F
+	dw \1
+	ENDM
+sound: MACRO
+       db $2F
+       dw \1
+       ENDM
+special: MACRO
+       db $25
+       dw \1
+       ENDM
+pause: MACRO
+       db $28
+       dw \1
+       ENDM
+setrespawn: MACRO
+	db $9F
+	dw \1
+	ENDM
+checkplayergender: MACRO
+	db $A0
+	ENDM
+applymovement: MACRO
+        db $50
+        db \1 
+        dw \2
+        ENDM
+waitmovement: MACRO
+        db $51
+        db \1 
+        ENDM
+playmoncry: MACRO
+	db $A1
+	dw \1
+	dw \2
+	ENDM
+playsong: MACRO
+	db $33
+	dw \1
+	db \2
+	ENDM
+setwildbattle: MACRO
+	db $B6
+	dw \1
+	db \2
+	dw \3
+	ENDM
+dowildbattle: MACRO
+	db $B7
+	ENDM
+setvirtualaddress: MACRO
+	db $B8
+	GBAPTR \1
+	ENDM
+waitstate: MACRO
+           db $27
+           ENDM
+virtualgotoif: MACRO
+	db $BB
+	db \1
+	GBAPTR \2
+	ENDM
+virtualmsgbox: MACRO
+	db $BD
+	GBAPTR \1
+	ENDM
+virtualloadpointer: MACRO
+	db $BE
+	GBAPTR \1
+	ENDM
+waitmoncry: MACRO
+	db $C5
+	ENDM
+setmoneventlegal: MACRO
+	db $CD
+	dw \1
+	ENDM
+checkmoneventlegal: MACRO
+	db $CE
+	dw \1
+	ENDM
+
+setmonmetlocation: MACRO
+	db $D2
+	dw \1
+	db \2
+	ENDM
+warp: MACRO
+	db $3F
+	db \1
+	db \2
+	db \3
+	db \4
+        db \5
+	ENDM
+buffernumber: MACRO
+	db $83
+	db \1
+	dw \2
+	ENDM
+closeonkeypress: MACRO
+	db $68
+	ENDM
+TEMPCELEBI: MACRO
+        db $00
+        db $00
+        db $00
+        db $00
+        db $91
+        db $79
+        db $00
+        db $00
+        db $5E
+        db $7A
+        db $97
+        db $80
+        db $FF
+        db $00
+        db $00
+        db $00
+        db $00
+        db $00
+        db $01
+        db $02
+        db $51
+        db $8A
+        db $64
+        db $FF
+        db $00
+        db $00
+        db $00
+        db $00
+        db $CB
+        db $18
+        db $00
+        db $00
+        db $FB
+        db $00
+        db $00
+        db $00
+        db $30
+        db $02
+        db $00
+        db $00
+        db $00
+        db $46
+        db $00
+        db $00
+        db $5D
+        db $00
+        db $69
+        db $00
+        db $D7
+        db $00
+        db $DB
+        db $00
+        db $19
+        db $14
+        db $05
+        db $19
+        db $00
+        db $00
+        db $00
+        db $00
+        db $00
+        db $00
+        db $00
+        db $00
+        db $00
+        db $00
+        db $00
+        db $00
+        db $00
+        db $FF
+        db $0A
+        db $A1
+        db $00
+        db $00
+        db $00
+        db $00
+        db $00
+        db $00
+        db $00
+        db $00
+	ENDM
+STRUCTURETABLEG: MACRO
+        db $00
+        db $00
+        db $00
+        db $00
+        db $00
+        db $00
+        db $0C
+        db $0C
+        db $18
+        db $24
+        db $18
+        db $24
+        db $0C
+        db $0C
+        db $18
+        db $24
+        db $18
+        db $24
+        db $0C
+        db $0C
+        db $18
+        db $24
+        db $18
+        db $24
+	ENDM
+STRUCTURETABLEA: MACRO
+        db $0C
+        db $0C
+        db $18
+        db $24
+        db $18
+        db $24
+        db $00
+        db $00
+        db $00
+        db $00
+        db $00
+        db $00
+        db $18
+        db $24
+        db $0C
+        db $0C
+        db $24
+        db $18
+        db $18
+        db $24
+        db $0C
+        db $0C
+        db $24
+        db $18
+	ENDM
+STRUCTURETABLEE: MACRO
+        db $18
+        db $24
+        db $0C
+        db $0C
+        db $24
+        db $18
+        db $18
+        db $24
+        db $0C
+        db $0C
+        db $24
+        db $18
+        db $00
+        db $00
+        db $00
+        db $00
+        db $00
+        db $00
+        db $24
+        db $18
+        db $24
+        db $18
+        db $0C
+        db $0C
+	ENDM
+STRUCTURETABLEM: MACRO
+        db $24
+        db $18
+        db $24
+        db $18
+        db $0C
+        db $0C
+        db $24
+        db $18
+        db $24
+        db $18
+        db $0C
+        db $0C
+        db $24
+        db $18
+        db $24
+        db $18
+        db $0C
+        db $0C
+        db $00
+        db $00
+        db $00
+        db $00
+        db $00
+        db $00
+	ENDM
+LOADSTOREPARTYAMOUNT: MACRO
+        db $02
+        db $49
+        db $08
+        db $78
+        db $02
+        db $49
+        db $08
+        db $60
+        db $70
+        db $47
+	db $00
+	db $00
+        db $DC
+        db $E8
+        db $02
+        db $02
+        db $F4
+        db $91
+        db $02
+        db $02
+	ENDM
+COLORNG: MACRO
+	db $10
+	db $48
+	db $01
+	db $68
+	db $10
+	db $4A
+	db $11
+	db $4B
+	db $11
+	db $4F
+	db $59
+	db $43
+	db $39
+	db $44
+	db $48
+	db $00
+	db $40
+	db $0C
+	db $59
+	db $43
+	db $39
+	db $44
+	db $4D
+	db $00
+	db $6D
+	db $0C
+	db $ED
+	db $03
+	db $28
+	db $43
+	db $90
+	db $64
+	db $59
+	db $43
+	db $39
+	db $44
+	db $0B
+	db $4E
+	db $59
+	db $43
+	db $39
+	db $44
+	db $08
+	db $0C
+	db $59
+	db $43
+	db $39
+	db $44
+	db $0D
+	db $0C
+	db $46
+	db $40
+	db $6E
+	db $40
+	db $07
+	db $2E
+	db $F4
+	db $D9
+	db $50
+	db $80
+	db $15
+	db $80
+	db $06
+	db $48
+	db $00
+	db $47
+	db $00
+	db $00
+        db $28
+        db $48
+        db $00
+        db $03
+        db $EC
+        db $8D
+        db $02
+        db $02
+	db $FD
+	db $43
+	db $03
+	db $00
+	db $C3
+	db $9E
+	db $26
+	db $00
+	db $91
+	db $79
+	db $00
+	db $00
+	db $0D
+	db $8F
+	db $02
+	db $02
+        ENDM
+MEMCPYSETUP: MACRO
+	db $00
+	db $B5
+	db $02
+	db $48
+	db $02
+	db $49
+	db $03
+	db $4A
+	db $0B
+	db $DF
+	db $05
+	db $E0
+        db $EC
+        db $8D
+        db $02
+        db $02
+	db $D0
+	db $45
+	db $00
+	db $03
+	db $08
+	db $00
+	db $00
+	db $04
+	ENDM
+SUBSTRUCTURECPY: MACRO
+	db $20
+	db $38
+	db $0D
+	db $4D
+	db $00
+	db $68
+	db $18
+	db $21
+	db $07
+	db $00
+	db $06
+	db $DF
+	db $38
+	db $00
+	db $00
+	db $28
+	db $03
+	db $D5
+	db $10
+	db $31
+	db $00
+	db $29
+	db $00
+	db $D5
+	db $18
+	db $31
+	db $0D
+	db $44
+	db $03
+	db $27
+	db $07
+	db $48
+	db $20
+	db $30
+	db $07
+	db $49
+	db $07
+	db $4A
+	db $2E
+	db $78
+	db $89
+	db $19
+	db $0B
+	db $DF
+	db $00
+	db $30
+	db $18
+	db $35
+	db $01
+	db $3F
+	db $F6
+	db $D5
+	db $08
+	db $E0
+	db $00
+	db $00
+	db $3C
+	db $8E
+	db $02
+	db $02
+	db $EC
+	db $8D
+	db $02
+	db $02
+	db $F0
+	db $45
+	db $00
+	db $03
+	db $03
+	db $00
+	db $00
+	db $04
+	ENDM
+CHECKSUM: MACRO
+	db $05
+	db $48
+	db $06
+	db $49
+	db $06
+	db $4A
+	db $0E
+	db $68
+	db $17
+	db $68
+	db $37
+	db $44
+	db $36
+	db $0C
+	db $37
+	db $44
+	db $3F
+	db $04
+	db $3F
+	db $0C
+	db $07
+	db $80
+	db $00
+	db $BD
+        db $EC
+        db $45
+        db $00
+        db $03
+	db $34
+	db $8E
+	db $02
+	db $02
+	db $08
+	db $8E
+	db $02
+	db $02
+	ENDM
+ENCRYPT: MACRO
+	db $01
+	db $48
+	db $00
+	db $00
+	db $01
+	db $4B
+	db $18
+	db $47
+        db $D0
+        db $45
+        db $00
+        db $03
+	db $C5
+	db $C7
+	db $03
+	db $08
+	ENDM
+CALCSTATS: MACRO
+	db $01
+	db $48
+	db $00
+	db $00
+	db $01
+	db $4B
+	db $18
+	db $47
+        db $D0
+        db $45
+        db $00
+        db $03
+	db $8D
+	db $B3
+	db $03
+	db $08
+	ENDM
+fadescreen: MACRO
+	db $97
+	db \1
+	ENDM
+doanimation: MACRO
+	db $9C
+	dw \1
+	ENDM
+CAPTURECELEBI: MACRO
+	db $04
+	db $48
+	db $05
+	db $49
+	db $05
+	db $4A
+	db $64
+	db $26
+	db $05
+	db $4B
+	db $1F
+	db $78
+	db $77
+	db $43
+	db $39
+	db $44
+	db $0B
+	db $DF
+	db $70
+	db $47
+        db $EC
+        db $8D
+        db $02
+        db $02
+	db $70
+	db $43
+	db $00
+	db $03
+	db $14
+	db $00
+	db $00
+	db $04
+	db $DA
+	db $E8
+	db $02
+	db $02
+	ENDM
+CELEBICOPY1: MACRO
+	db $02
+	db $48
+	db $03
+	db $49
+	db $03
+	db $4A
+	db $0B
+	db $DF
+	db $70
+	db $47
+	db $00
+	db $00
+	db $D0
+	db $45
+	db $00
+	db $03
+        db $EC
+        db $8D
+        db $02
+        db $02
+	db $14
+	db $00
+	db $00
+	db $04
+	ENDM
+SRTEST: MACRO
+	db $00
+	db $DF
+	db $70
+	db $47
+	ENDM
+SRFIX: MACRO
+	db $01
+	db $4D
+	db $01
+	db $4E
+	db $00
+	db $27
+	db $70
+	db $47
+	db $70
+	db $17
+	db $00
+	db $03
+	db $A9
+	db $33
+	db $00
+	db $03
+	ENDM
