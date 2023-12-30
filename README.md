@@ -34,9 +34,9 @@ Shao - Programming assistance
 
 Riley - programming assistance, pokeemerald files
 
-Goppier - setboxmondata informant and programming assistance
+Goppier - WC3 GBA Sender, setboxmondata informant and programming assistance
 
-UndeadXReality - programming assistance & .sav provider
+UndeadXReality - WC3 GBA Sender, programming assistance & .sav provider
 
 happylappy - general assistance
 
