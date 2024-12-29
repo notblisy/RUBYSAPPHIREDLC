@@ -1,0 +1,152 @@
+Start:
+	PUSH {LR}
+	PUSH {r0-r7}
+ColoRNGAlgo:	
+	ldr r2, gRNGValue
+	ldr r1, [r2]
+	ldr r0, TempCelebiLocation
+	ldr r3, ColoMult
+	ldr r4, ColoAdd
+	mul r1, r3 	  @Colo RNG for IV1
+	add r1, r4
+	lsl r2, r1, #1 @bitshift and stores result into r0
+	lsr r2, r2, #17
+	mul r1, r3    @Colo RNG for IV2
+	add r1, r4
+	lsl r5, r1, #1
+	lsr r5, r5, #17
+	lsl r5, r5, #15
+	ORR r2, r5
+	str r2, [r0, #72] @combine and store IVs into Pokemon
+	mul r1, r3        @Blank RNG for ability
+	add r1, r4
+	ldr r6, CelebiOTID
+SHINYLOCKSTART:
+	mul r1, r3        @RNG for PID1
+	add r1, r4
+	lsr r2, r1, #16
+	mul r1, r3        @RNG for PID2
+	add r1, r4
+	lsr r5, r1, #16
+	EOR r6, r2
+	EOR r6, r5
+	cmp r6, #7
+	bls SHINYLOCKSTART @comment this out to remove shinylock
+	strh r2, [r0, #2]  @Store PID in proper spot.
+	strh r5, [r0, #0]
+MemoryCopyCelebi:
+	ldr r1, gEnemyParty
+	ldr r2, UnencryptedCopyLengthInfo
+	SWI 11
+	ldr r0, TempCelebiLocation
+	ldr r5, SubstructureTable
+	ldr r0, [r0]
+	mov r1, #24
+	mov r7, r0
+	swi #06
+	mov r0, r7
+	cmp r0, #0
+	bpl EndCorrectionMath
+	add r1, #16
+	cmp r1, #0
+	bpl EndCorrectionMath
+	add r1, #24
+EndCorrectionMath:
+	add r5, r1
+	ldrb r6, [r5]
+	ldr r0, TempCelebiLocation
+	mov r7, #3  @loop counter setup
+	mov r4, #12
+	mov r5, #3
+	add r0, #32 @Substructure start location for TempCelebiLocation
+SubstructureCopyLoop:
+	ldr r1, gEnemyParty @destination of substructures
+	add r1, #32 @adding 32 to make substructure enemy ram celebi gEnemyParty
+	ldr r2, SubstructureCopyLengthInfo
+	mov r3, r6 
+	and r3, r5
+	mul r3, r4
+	add r1, r3
+	swi #11
+	lsr r6, #2
+	sub r7, #1
+	bpl SubstructureCopyLoop
+	lsl r0, r0, #0
+FixCelebi:
+	mov r4, pc
+	add r4, #9
+	mov lr, r4
+	ldr r0, gEnemyParty
+	ldr r3, CalculateBoxMonChecksum
+	bx r3
+	ldr r1, gEnemyParty
+	strh r0, [r1, #28]
+	mov r4, pc
+	add r4, #9
+	mov lr, r4
+	mov r0, r1
+	ldr r3, EncryptBoxMon
+	bx r3
+	mov r4, pc
+	add r4, #9
+	mov lr, r4
+	ldr r0, gEnemyParty
+	ldr r3, CalculateMonStats
+	bx r3
+	ldr r0, gEnemyParty
+	ldr r1, TempCelebiLocation
+	ldr r2, UnencryptedCopyLengthInfo
+	add r2, #12
+	swi #11
+	pop {r0-r7, pc}
+CaptureCelebi:
+	PUSH {LR}
+	PUSH {r0-r7}
+	ldr r0, TempCelebiLocation @Copy entire celebi over pre-battle
+	ldr r1, gPlayerParty
+	ldr r2, UnencryptedCopyLengthInfo
+	add r2, #12
+	mov r6, #100               @this section figures out party position
+	ldr r3, gSpecialVar_0x800B @party size stored in special var, times 100
+	ldrb r7, [r3]              @add result to destination
+	mul r7, r6
+	add r1, r7
+	swi #11
+	ldr r0, gEnemyParty        @this copies stuff to keep nickname
+	ldr r1, gPlayerParty
+	mov r2, #5
+	add r1, r7
+	add r0, #8
+	add r1, #8
+	swi #11
+	pop {r0-r7, pc}
+.align
+gRNGValue:
+	.long 0x03005d80
+ColoMult:
+	.long 0x000343FD
+ColoAdd:
+	.long 0x00269EC3
+TempCelebiLocation:
+	.long 0x0203ABE0 
+SubstructureTable:
+	.long 0x0203AC30 @Change Later
+gPlayerParty:
+	.long 0x020244ec
+gEnemyParty:
+	.long 0x02024744
+UnencryptedCopyLengthInfo:
+	.long 0x04000008
+SubstructureCopyLengthInfo:
+	.long 0x04000003
+CalculateBoxMonChecksum:
+	.long 0x08068c79
+EncryptBoxMon:
+	.long 0x0806a229
+CalculateMonStats:
+	.long 0x08068d0d
+CelebiOTID:
+	.long 0x00007991
+gSpecialVar_0x800B:
+	.long 0x020375ee @Player Party Size
+	

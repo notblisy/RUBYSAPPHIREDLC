@@ -1,0 +1,11 @@
+Start:
+	mov r0, #30
+	ldr r1, gSaveDataBuffer
+	ldr r3, ReadFlashSector
+	bx r3
+.align
+gSaveDataBuffer:
+    .long 0x0203abbc
+ReadFlashSector:
+	.long 0x0815314d
+

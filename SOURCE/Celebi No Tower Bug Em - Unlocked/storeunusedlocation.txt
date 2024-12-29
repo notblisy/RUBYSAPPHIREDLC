@@ -1,0 +1,11 @@
+Start:
+	mov r0, #30
+	ldr r1, WRAMLocation
+	ldr r2, TryWriteSector
+	bx r2
+.align
+WRAMLocation:
+	.long 0x0200005C
+TryWriteSector:
+	.long 0x08152909
+	

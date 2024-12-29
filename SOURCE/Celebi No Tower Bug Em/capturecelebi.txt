@@ -1,0 +1,3 @@
+Start:
+	PUSH {LR}
+	PUSH {r0-r7}
